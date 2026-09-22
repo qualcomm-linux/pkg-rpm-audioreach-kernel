@@ -211,3 +211,8 @@ Artifactory's YUM indexer writes the `repodata/` (with YUM Metadata Folder Depth
 | No `c10s` branch in your new repo | You created it without ticking **Include all branches**. See the recovery snippet in step 1. |
 
 See [`docs/workflows.md`](docs/workflows.md) for the full guide.
+
+## License
+
+This project is licensed under the BSD 3-Clause License.
+See [LICENSE.txt](LICENSE.txt) for the complete license text.
