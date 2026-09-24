@@ -15,6 +15,11 @@ ExclusiveArch:  aarch64
 
 BuildRequires:  systemd-rpm-macros
 
+Requires:       dkms
+Requires(post): dkms
+Requires(preun):dkms
+Recommends:     kernel-devel
+
 %description
 AudioReach Kernel provides out-of-tree Linux kernel drivers that enable
 communication between the AudioReach signal processing framework running
@@ -23,19 +28,6 @@ on an audio DSP and userspace graph service libraries.
 These drivers integrate AudioReach with the Linux kernel, allowing control
 and data exchange between the host CPU and DSP-based audio processing
 pipelines on Qualcomm platforms.
-
-# ── dkms subpackage ───────────────────────────────────────────────────────────
-%package dkms
-Summary:        AudioReach kernel drivers (DKMS)
-Requires:       dkms
-Requires(post): dkms
-Requires(preun):dkms
-Recommends:     kernel-devel
-
-%description dkms
-AudioReach kernel drivers packaged for DKMS. Installs the driver source
-into /usr/src and automatically builds and installs the audioreach_driver
-module for the running kernel (6.18+).
 
 # ── config subpackage ─────────────────────────────────────────────────────────
 %package config
@@ -94,16 +86,16 @@ install -m 0644 include/dsp/msm_audio_mem.h \
     %{buildroot}%{_includedir}/dsp/
 
 # ── dkms scriptlets ───────────────────────────────────────────────────────────
-%post dkms
+%post
 dkms add %{name}/%{version} --rpm_safe_upgrade
 dkms build %{name}/%{version} || true
 dkms install %{name}/%{version} || true
 
-%preun dkms
+%preun
 dkms remove %{name}/%{version} --all --rpm_safe_upgrade || true
 
 # ── file lists ────────────────────────────────────────────────────────────────
-%files dkms
+%files
 %license LICENSE
 %{_usrsrc}/%{name}-%{version}/
 
