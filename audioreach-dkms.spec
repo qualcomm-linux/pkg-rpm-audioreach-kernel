@@ -2,7 +2,7 @@
 
 Name:           audioreach-dkms
 Version:        1.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        AudioReach out-of-tree Linux kernel drivers
 
 License:        GPL-2.0-only
@@ -42,12 +42,12 @@ character devices.
 Install this alongside audioreach-dkms to activate the AudioReach
 DSP audio path on QCS6490 (RB3 Gen2).
 
-# ── dev subpackage ────────────────────────────────────────────────────────────
-%package dev
+# ── devel subpackage ──────────────────────────────────────────────────────────
+%package -n audioreach-linux-devel
 Summary:        Development headers for AudioReach kernel drivers
 BuildArch:      noarch
 
-%description dev
+%description -n audioreach-linux-devel
 Header files required to build userspace applications or kernel modules
 that integrate with AudioReach kernel drivers.
 
@@ -103,10 +103,15 @@ dkms remove %{name}/%{version} --all --rpm_safe_upgrade || true
 %{_sysconfdir}/modprobe.d/audioreach.conf
 %{_udevrulesdir}/audioreach.rules
 
-%files dev
+%files -n audioreach-linux-devel
 %{_includedir}/linux/msm_audio.h
 %{_includedir}/dsp/msm_audio_mem.h
 
 %changelog
+* Thu Sep 25 2026 Chiluka Rohith <rchiluka@qti.qualcomm.com> - 1.1.0-2
+- Rename headers subpackage from audioreach-dkms-dev to
+  audioreach-linux-devel for CentOS naming convention and to
+  align with the Debian audioreach-linux-dev package
+
 * Wed Aug 27 2026 Qualcomm Linux <quic_linux@quicinc.com> - 1.1.0-1
 - Initial RPM packaging of audioreach-kernel version 1.1.0
