@@ -2,7 +2,7 @@
 
 Name:           audioreach-dkms
 Version:        1.1.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        AudioReach out-of-tree Linux kernel drivers
 
 License:        GPL-2.0-only
@@ -75,6 +75,8 @@ install -d %{buildroot}%{_udevrulesdir}/
 cat > %{buildroot}%{_udevrulesdir}/audioreach.rules << 'EOF'
 KERNEL=="msm_audio_mem", GROUP="audio", MODE="0660"
 KERNEL=="aud_pasthru_adsp", GROUP="audio", MODE="0660"
+KERNEL=="msm_audio_mem_cma", GROUP="audio", MODE="0660"
+SUBSYSTEM=="dma_heap", KERNEL=="qcom,audio-ml",GROUP="audio", MODE="0660"
 EOF
 
 # ── dev: install UAPI and DSP headers ─────────────────────────────────────────
@@ -108,6 +110,11 @@ dkms remove %{name}/%{version} --all --rpm_safe_upgrade || true
 %{_includedir}/dsp/msm_audio_mem.h
 
 %changelog
+* Fri Oct 30 2026 Karthik S <karthik.s@oss.qualcomm.com> - 1.1.2-2
+- Add udev permissions for the msm_audio_mem_cma device and the
+  qcom,audio-ml DMA heap to allow audio service in the audio group
+  to access the required memory resources.
+
 * Tue Oct 27 2026 Febin Francis <ffrancis@qti.qualcomm.com> - 1.1.2-1
 - Update to 1.1.2
 - Add CMA memory backend driver
